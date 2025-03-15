@@ -4,32 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEO Fibonacci Analysis Tool</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/seo/css/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>SEO Fibonacci Analysis Tool</h1>
-        
-        <div class="file-section">
-            <input type="file" id="fileInput" accept=".csv" />
-            <button id="processButton" disabled>Process Data</button>
-            <div id="status" class="status" style="display: none;"></div>
-        </div>
+        <header>
+            <h1>SEO Fibonacci Analysis Tool</h1>
+            <p>Upload your SEMrush position tracking data to analyze keyword volatility patterns</p>
+        </header>
 
-        <div class="results-section" id="resultsSection" style="display: none;">
-            <h2>Volatile Keywords</h2>
-            <div id="keywordList" class="keyword-list"></div>
-            <button id="analyzeSelected" disabled>Analyze Selected Keywords</button>
-            <div id="chartContainer" class="chart-container"></div>
-        </div>
+        <main>
+            <section class="upload-section">
+                <div class="file-upload">
+                    <input type="file" id="fileInput" accept=".csv" class="file-input">
+                    <label for="fileInput" class="file-label">Choose CSV File</label>
+                </div>
+                <button id="processButton" class="button" disabled>Process Data</button>
+                <div id="status" class="status" style="display: none;"></div>
+            </section>
+
+            <section id="resultsSection" class="results-section" style="display: none;">
+                <div class="keywords-container">
+                    <h2>Volatile Keywords</h2>
+                    <div class="keyword-controls">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="selectAllKeywords">
+                            <span class="checkbox-label">Select All</span>
+                        </label>
+                        <button id="analyzeSelected" class="button secondary" disabled>Analyze Selected</button>
+                    </div>
+                    <div id="keywordList" class="keyword-list"></div>
+                </div>
+                <div id="chartContainer" class="chart-container"></div>
+            </section>
+        </main>
     </div>
 
     <!-- Load third-party libraries -->
-    <script src="lib/lodash.min.js"></script>
-    <script src="lib/papaparse.min.js"></script>
-    <script src="lib/chart.umd.min.js"></script>
+    <script src="/seo/lib/lodash.min.js"></script>
+    <script src="/seo/lib/papaparse.min.js"></script>
+    <script src="/seo/lib/chart.umd.min.js"></script>
     
     <!-- Load application code -->
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="/seo/js/main.js"></script>
 </body>
 </html> 
