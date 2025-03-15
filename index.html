@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Fibonacci Analysis Tool</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SEO Fibonacci Analysis Tool</h1>
+        
+        <div class="file-section">
+            <input type="file" id="fileInput" accept=".csv" />
+            <button id="processButton" disabled>Process Data</button>
+            <div id="status" class="status" style="display: none;"></div>
+        </div>
+
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <h2>Volatile Keywords</h2>
+            <div id="keywordList" class="keyword-list"></div>
+            <button id="analyzeSelected" disabled>Analyze Selected Keywords</button>
+            <div id="chartContainer" class="chart-container"></div>
+        </div>
+    </div>
+
+    <!-- Load third-party libraries -->
+    <script src="lib/lodash.min.js"></script>
+    <script src="lib/papaparse.min.js"></script>
+    <script src="lib/chart.umd.min.js"></script>
+    
+    <!-- Load application code -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html> 
