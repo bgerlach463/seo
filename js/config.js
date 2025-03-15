@@ -1,13 +1,17 @@
 /**
- * Configuration constants for the SEO Fibonacci Analysis Tool
+ * Configuration constants for the SEO Fibonacci Analyzer
  */
 export const CONFIG = {
-    // Analysis settings
+    // Fibonacci levels for analysis
     FIBONACCI_LEVELS: [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1],
+    
+    // Volatility threshold for considering a keyword volatile
     VOLATILITY_THRESHOLD: 10,
+    
+    // Position matching tolerance for pattern detection
     PATTERN_TOLERANCE: 2,
     
-    // Chart colors and styling
+    // Chart colors
     COLORS: {
         KEYWORD_LINE: '#4CAF50',
         KEYWORD_FILL: 'rgba(76, 175, 80, 0.1)',

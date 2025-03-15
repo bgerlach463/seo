@@ -1,9 +1,11 @@
-/**
- * UI Controller for the SEO Fibonacci Analysis Tool
- */
+// This file extends the SEOFibUIController with chart rendering capabilities
+// Make sure to include Chart.js before using these functions
 
 import { CONFIG } from './config.js';
 
+/**
+ * UI Controller for the SEO Fibonacci Analyzer
+ */
 export class SEOFibUIController {
     /**
      * @param {import('./analyzer.js').SEOFibonacciAnalyzer} analyzer 
@@ -24,7 +26,7 @@ export class SEOFibUIController {
 
         container.innerHTML = '';
         
-        // Create select all checkbox
+        // Create a select all checkbox
         const selectAllDiv = document.createElement('div');
         selectAllDiv.className = 'select-all-container';
         
@@ -40,7 +42,7 @@ export class SEOFibUIController {
         selectAllDiv.appendChild(selectAllLabel);
         container.appendChild(selectAllDiv);
         
-        // Create keyword list
+        // Create the keyword list
         const keywordList = document.createElement('div');
         keywordList.className = 'keyword-list';
         
@@ -58,7 +60,7 @@ export class SEOFibUIController {
             
             const label = document.createElement('label');
             label.htmlFor = `keyword-${keyword}`;
-            label.textContent = `${keyword} (Volatility: ${keywordData.volatilityScore.toFixed(2)})`;
+            label.textContent = `${keyword} (Score: ${keywordData.volatilityScore.toFixed(2)})`;
             
             keywordDiv.appendChild(checkbox);
             keywordDiv.appendChild(label);
@@ -107,7 +109,8 @@ export class SEOFibUIController {
  * @param {HTMLElement} container 
  */
 export function createChartVisualization(chartData, container) {
-    // Prepare canvas
+    // If container is a canvas element, use it directly
+    // Otherwise, create a canvas and append it to the container
     let canvas = container;
     if (!(container instanceof HTMLCanvasElement)) {
         canvas = document.createElement('canvas');
@@ -121,11 +124,11 @@ export function createChartVisualization(chartData, container) {
         return;
     }
 
-    // Prepare data
+    // Data preparation
     const dates = chartData.positions.map(p => new Date(p.date).toLocaleDateString());
     const positions = chartData.positions.map(p => p.position);
 
-    // Create Fibonacci level datasets
+    // Create datasets for the Fibonacci levels
     const minPosition = Math.min(...positions);
     const maxPosition = Math.max(...positions);
     const range = maxPosition - minPosition;
@@ -143,7 +146,7 @@ export function createChartVisualization(chartData, container) {
         };
     });
 
-    // Create chart
+    // Create the chart
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -217,4 +220,17 @@ export function createChartVisualization(chartData, container) {
             }
         }
     });
-} 
+}
+
+function getFibLevelColor(level) {
+    const colors = {
+        0: 'rgba(255, 99, 132, 0.5)',    // Red
+        0.236: 'rgba(255, 159, 64, 0.5)', // Orange
+        0.382: 'rgba(255, 205, 86, 0.5)', // Yellow
+        0.5: 'rgba(75, 192, 192, 0.5)',   // Green
+        0.618: 'rgba(54, 162, 235, 0.5)', // Blue
+        0.786: 'rgba(153, 102, 255, 0.5)', // Purple
+        1: 'rgba(201, 203, 207, 0.5)'     // Grey
+    };
+    return colors[level] || 'rgba(0, 0, 0, 0.5)';
+}

@@ -1,7 +1,4 @@
-/**
- * Main entry point for the SEO Fibonacci Analysis Tool
- */
-
+// Import our analyzer classes and transformers
 import { SEOFibonacciAnalyzer } from './analyzer.js';
 import { SEOFibUIController } from './ui.js';
 import { transformSEMrushData } from './semrush-adapter.js';
@@ -13,20 +10,20 @@ import { CONFIG } from './config.js';
 function initializeApp() {
     console.log('Initializing application...');
 
-    // Get DOM elements
+    // DOM elements
     const elements = {
         csvFileInput: document.getElementById('csv-file'),
         uploadButton: document.getElementById('upload-btn'),
         uploadStatus: document.getElementById('upload-status'),
-        keywordSection: document.getElementById('keyword-section'),
+        keywordSection: document.getElementById('keyword-selection'),
         keywordListContainer: document.getElementById('keyword-list-container'),
         analyzeButton: document.getElementById('analyze-btn'),
-        resultsSection: document.getElementById('results-section'),
+        resultsSection: document.getElementById('results'),
         chartsContainer: document.getElementById('charts-container'),
         summaryContainer: document.getElementById('summary-container')
     };
 
-    // Verify all elements exist
+    // Verify all elements were found
     const missingElements = Object.entries(elements)
         .filter(([key, element]) => !element)
         .map(([key]) => key);
@@ -39,7 +36,7 @@ function initializeApp() {
 
     console.log('All DOM elements found');
 
-    // Initialize classes
+    // Create instances of our classes
     const analyzer = new SEOFibonacciAnalyzer();
     const uiController = new SEOFibUIController(analyzer);
 
@@ -58,7 +55,7 @@ function showStatus(message, type, statusElement) {
     if (!statusElement) return;
 
     statusElement.innerHTML = message;
-    statusElement.className = 'status';
+    statusElement.className = '';
     statusElement.classList.add(`status-${type}`);
 }
 
@@ -105,9 +102,9 @@ async function handleFileUpload(file, context) {
     });
 
     try {
-        showStatus('Processing file... This might take a minute for large datasets.', 'info', elements.uploadStatus);
+        showStatus('<div class="loading-spinner"></div> Processing file... This might take a minute for large datasets.', 'info', elements.uploadStatus);
         
-        // Read and parse file
+        // Read and parse the file
         const fileContent = await readFile(file);
         console.log('File read successfully, length:', fileContent.length);
         
@@ -127,7 +124,7 @@ async function handleFileUpload(file, context) {
         console.log('CSV parsed successfully');
         console.log('Headers:', parsedResult.meta.fields);
         
-        // Transform and process data
+        // Transform and process the data
         console.log('Starting data transformation');
         const transformedData = transformSEMrushData(parsedResult.data);
         
@@ -139,7 +136,7 @@ async function handleFileUpload(file, context) {
         
         console.log(`Transformed ${transformedData.length} data points`);
         
-        // Process data
+        // Process the data
         console.log('Processing transformed data');
         analyzer.processRawData(transformedData);
         
@@ -219,7 +216,7 @@ function analyzeSelectedKeywords(context) {
         chartHeader.appendChild(chartTitle);
         chartCard.appendChild(chartHeader);
         
-        // Create chart
+        // Create and add chart
         const chartCanvas = document.createElement('canvas');
         chartCanvas.height = CONFIG.CHART.CANVAS_HEIGHT;
         chartCard.appendChild(chartCanvas);
@@ -251,7 +248,7 @@ function analyzeSelectedKeywords(context) {
     elements.resultsSection.style.display = 'block';
 }
 
-// Initialize application when DOM is loaded
+// Initialize the application when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const context = initializeApp();
     if (!context) return;
@@ -270,4 +267,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show initial status
     showStatus('Please select a SEMrush CSV file and click "Process Data"', 'info', elements.uploadStatus);
-}); 
+});
