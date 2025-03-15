@@ -21,8 +21,12 @@ const uiController = new SEOFibUIController(analyzer);
 uploadButton.addEventListener('click', handleFileUpload);
 analyzeButton.addEventListener('click', analyzeSelectedKeywords);
 
+// Show initial status
+showStatus('Please select a SEMrush CSV file and click "Process Data"', 'info');
+
 // Handle file upload
 async function handleFileUpload() {
+    console.log('File upload button clicked');
     const file = csvFileInput.files[0];
     if (!file) {
         showStatus('Please select a CSV file first.', 'error');
@@ -34,16 +38,35 @@ async function handleFileUpload() {
         
         // Read the file
         const fileContent = await readFile(file);
+        console.log('File read successfully, length:', fileContent.length);
         
         // Parse the CSV file
         const parsedResult = Papa.parse(fileContent, {
             header: true,
             dynamicTyping: true,
-            skipEmptyLines: true
+            skipEmptyLines: true,
+            error: (error) => {
+                console.error('CSV parsing error:', error);
+                showStatus('Error parsing CSV file. Please check the file format.', 'error');
+            }
         });
+        
+        if (parsedResult.errors && parsedResult.errors.length > 0) {
+            console.warn('CSV parsing warnings:', parsedResult.errors);
+        }
+        
+        console.log('CSV parsed, sample row:', parsedResult.data[0]);
+        console.log('CSV headers:', parsedResult.meta.fields);
         
         // Transform the complex SEMrush format to the format expected by the analyzer
         const transformedData = transformSEMrushData(parsedResult.data);
+        
+        if (transformedData.length === 0) {
+            showStatus('No valid data found in the CSV. Make sure you\'re using a SEMrush position tracking export.', 'error');
+            return;
+        }
+        
+        console.log(`Transformed ${transformedData.length} data points`);
         
         // Process the transformed data
         analyzer.processRawData(transformedData);
@@ -55,6 +78,8 @@ async function handleFileUpload() {
             showStatus('No volatile keywords found in the data. Try uploading a file with more historical data points.', 'error');
             return;
         }
+        
+        console.log(`Found ${analyzer.volatileKeywords.length} volatile keywords`);
         
         // Render the keyword selection list
         uiController.renderVolatileKeywordsList(keywordListContainer);
@@ -79,6 +104,7 @@ function readFile(file) {
         };
         
         reader.onerror = (error) => {
+            console.error('File reading error:', error);
             reject(error);
         };
         
